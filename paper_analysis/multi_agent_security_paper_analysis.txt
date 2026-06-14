@@ -1,0 +1,28 @@
+multi_agent security paper :
+
+## Exploring Multi-Agent Reinforcement Learning for Cyber Defence
+
+### Problem Statement
+The paper addresses the increasing sophistication and automation of cyber threats, which necessitate novel solutions to enhance the defense of enterprise networks. While single Deep Reinforcement Learning (DRL) agents have shown utility in autonomous cyber defense, they exhibit significant limitations, particularly concerning scalability within large enterprise networks [1]. The current challenge lies in the high cost of developing Multi-Agent Reinforcement Learning (MARL) agents and the scarcity of environments available to test MARL cyber defense techniques against adversarial agents [1].
+
+### Methodology/Approach
+The authors introduce CAGE Challenge 4 (CC4), an open-source MARL environment specifically designed to evaluate the efficacy of MARL algorithms in an enterprise network setting [1] [2].
+
+*   **Environment Design**: CC4 simulates a relatively large operational military network, divided into eight individual subnets, mimicking real-world incident response scenarios where multiple blue agents defend against red agents [3] [4]. This environment allows for the study of multi-agent autonomous cyber defense, enabling researchers to build, initialize, and test multi-agent AI models across various cyber security scenarios [2].
+*   **Agent Allocation**: Blue and red agents are allocated up to one per subnet. Blue agents have sessions on all hosts in their subnet, while red agents begin with one privileged session in the 'Contractor Network' subnet and expand their presence by gaining sessions in other subnets [5].
+*   **Reward System**: Rewards in CC4 are scaled to reflect mission priorities, with more impactful rewards for actions that adversely affect critical mission priorities (e.g., exploiting a host with escalated privileges) [6]. The dynamic reward function primarily focuses on how blue and red actions impact green agents, rather than solely on red agent actions, to limit state leakage to blue agents [6].
+*   **Agent Actions**: Blue agents have eight possible actions, including 'Monitor', 'Analyse', 'Deploy Decoy', 'Remove', 'Restore', 'Block Traffic Zone', 'Allow Traffic Zone', and 'Sleep', each with varying time durations [7]. Blue agents can also send 8-bit messages to other blue agents for collaborative decision-making [8]. Red agents' actions involve discovering network information, gaining privileged sessions, and negatively affecting green agents' ability to complete actions [9].
+
+### Limitations of the Approach
+The paper highlights several limitations, particularly regarding MARL's current effectiveness:
+
+*   **Scalability Challenges**: While MARL aims to address the scalability issues of single DRL agents, developing MARL agents remains costly, and environments for testing them are limited [1].
+*   **Generalizability Issues**: Preliminary studies using CC4 indicated that heuristic-based agents outperformed all MARL-based submissions. This suggests that MARL-based agents require further research to effectively respond to both known and unknown threats, as they struggled to generalize across different attack conditions [10].
+*   **Network Configuration Learning**: All submitted MARL solutions failed to learn how to determine the network configuration at the beginning of each episode, indicating a weakness that future MARL approaches need to overcome [11].
+
+### Datasets and Evaluation Metrics
+
+*   **Dataset**: The paper uses the CAGE Challenge 4 (CC4) environment, which is a simulated enterprise network [1]. This environment serves as the dataset for training and evaluating agents, providing a platform for researchers to test multi-agent AI models across various cyber security scenarios [2].
+*   **Evaluation Metrics**: The primary evaluation metric is the **average cumulative reward per episode**, calculated over 100 episodes, each consisting of 500 steps [12]. This metric is used to compare the performance of different agent types (heuristic vs. MARL) and assess their generalizability across various scenarios, including constant network size, improved decoy detection, increased phishing, stealthy red, and aggressive red [12]. The platform used for evaluation is Codalabs, which automatically assesses agents in the CC4 environment and extracts the average reward for a leaderboard [13].
+
+In summary, this paper introduces CAGE Challenge 4 as a crucial environment for advancing Multi-Agent Reinforcement Learning in autonomous cyber defense, while also highlighting the current limitations of MARL in handling complex, real-world scenarios and the need for further research to improve its generalizability and scalability.

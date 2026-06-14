@@ -1,0 +1,78 @@
+memory posining paper 1
+
+## Memory Poisoning in LLM-Agents: Problem, Methodology, Limitations, and Evaluation
+
+### The Problem: Vulnerability of LLM-Agents to Memory Poisoning
+- Large Language Model (LLM) agents with persistent memory are susceptible to 'memory poisoning attacks' [1].
+- Adversaries can inject malicious instructions through query-only interactions, corrupting the agent's long-term memory and influencing future responses [1].
+- These attacks are particularly severe in high-stakes domains like healthcare, where they could lead to misdiagnosis, incorrect medication, or adverse patient outcomes if an Electronic Health Record (EHR) agent's memory is poisoned [2].
+- Previous work, such as MINJA (Memory Injection Attack), demonstrated high success rates for these attacks under idealized conditions, but their robustness in realistic deployments and effective defensive mechanisms remained understudied [1] [3].
+
+### Methodology and Approach
+- The paper systematically evaluates memory poisoning attacks and defenses in the context of EHR agents [1] [3].
+- **Attack Robustness Evaluation:** The study investigates attack robustness by varying three critical dimensions: initial memory state, number of indication prompts, and retrieval parameters [1].
+- **Novel Defense Mechanisms:** Two new defense mechanisms are proposed and evaluated:
+    - **Input/Output Moderation:** A two-stage gating mechanism that combines static heuristics (e.g., keyword matching), LLM-based semantic classification, code safety analysis, semantic relevance verification, and optional sandboxed execution to prevent malicious entries from entering the execution pipeline and memory bank. It uses composite trust scoring across multiple orthogonal signals [1] [4].
+    - **Memory Sanitization with Trust-Aware Retrieval:** A continuous trust scoring system that operates at both memory append and retrieval stages. It assigns trust scores based on output verification, sandbox re-execution, and pattern analysis, then applies temporal decay to stored memories and trust-aware filtering during few-shot example selection [1] [5].
+
+### Limitations of the Approach
+- **Idealized vs. Realistic Conditions:** Previous evaluations of MINJA largely considered idealized or controlled settings with minimal initial memory, limited attack queries, and fixed retrieval parameters, which do not reflect real-world deployed systems [3]. The paper addresses this by evaluating under more realistic conditions but acknowledges that even with 6 initial memories, the attack is difficult, and real systems have millions of records [6].
+- **Defense Effectiveness:** Existing defenses, such as detection-based moderation (e.g., Llama Guard) and memory sanitization techniques, have proven largely ineffective against MINJA because the attack embeds plausible reasoning within contextually harmless instructions [7]. While the proposed defenses aim to counter this, the evaluation reveals challenges in calibrating trust thresholds and distinguishing confident truth from confident malice [8] [9].
+- **Trust Threshold Calibration:** Effective memory sanitization requires careful trust threshold calibration to avoid overly conservative rejection (blocking all entries) or insufficient filtering (missing subtle attacks) [1]. The study found that one model (GPT-40-mini) was overly conservative, rejecting all entries, while another (Gemini-2.0-Flash) was vulnerable to sophisticated prompts, accepting malicious entries with high trust scores [8] [9].
+
+### Datasets and Evaluation Metrics
+- **Dataset:** The research primarily uses the MIMIC-III clinical data, specifically in the context of Electronic Health Record (EHR) agents [1]. The experiments involve a curated attack suite derived from clinical prompt collections (eICU and MIMIC prompt sets) [4].
+- **Evaluation Metrics:**
+    - **Injection Success Rate (ISR):** Measures the percentage of times malicious instructions are successfully injected into the agent's memory [1] [6].
+    - **Attack Success Rate (ASR):** Measures the percentage of times the agent's responses are influenced by the injected malicious instructions, leading to incorrect or harmful outputs [1] [6].
+    - **Benign Utility Metrics:** Includes accuracy on non-attacked queries and false-positive rejection rates for defense mechanisms [4].
+    - **Memory Append Behavior:** Tracks how many candidate memory items are appended or rejected by defense mechanisms [4].
+    - **Trust Score Distribution:** Analyzes the distribution of trust scores for candidate memory entries, including acceptance vs. rejection rates and statistical properties (mean, variance, range) [8].
+    - **Attack Prevention Effectiveness:** Quantifies the number and fraction of poison queries blocked or leaked into long-term memory [8].
+    - **Retrieval-Time Filtering:** Measures how accepted entries would be filtered out or retrieved based on effective trust scores and temporal decay [8].
+    - **Memory Cleanup Behavior:** Scans system logs for events where low-trust, aged entries are removed from memory [10].
+
+In summary, this paper tackles the critical problem of memory poisoning in LLM-agents, particularly in sensitive domains like healthcare. It proposes and evaluates novel defense mechanisms—Input/Output Moderation and Memory Sanitization with Trust-Aware Retrieval—under more realistic conditions than previous studies. While these defenses show promise, the research highlights the ongoing challenge of effectively calibrating trust thresholds and differentiating between benign and malicious content, especially when adversaries use sophisticated attack techniques.
+
+
+memory poisoning paper 2: 
+
+
+## AGENTPOISON: Addressing Trustworthiness in LLM Agents
+
+### Problem Statement
+- The paper addresses the critical issue of trustworthiness in Large Language Model (LLM) agents, particularly concerning their reliance on unverified knowledge bases. Current LLM agents often use memory modules or Retrieval-Augmented Generation (RAG) mechanisms to retrieve past knowledge, which can be exploited by adversaries [1] [2].
+- Existing attacks like jailbreaking and conventional backdoor attacks are ineffective against RAG-based LLM agents due to the resilient nature of retrieval processes and suboptimal triggers that fail to guarantee the retrieval of malicious demonstrations [3].
+
+### Methodology or Approach
+- The authors propose **AGENTPOISON**, a novel red-teaming approach that targets generic and RAG-based LLM agents by poisoning their long-term memory or RAG knowledge base [1] [3].
+- **Constrained Optimization for Trigger Generation**: AGENTPOISON formulates the trigger generation process as a constrained optimization problem. This optimizes backdoor triggers by mapping triggered instances to a unique embedding space, ensuring that malicious demonstrations are retrieved with high probability when a user instruction contains the optimized trigger [1] [4].
+- **Objective Function**: The objective function is designed to jointly maximize:
+    - **Retrieval Effectiveness**: The probability of retrieving malicious demonstrations for any triggered query [5].
+    - **Target Generation**: The probability of generating the target malicious action when malicious key-value pairs are retrieved [5].
+    - **Coherence**: The textual coherence of the triggered query, making it stealthy and hard to detect [5] [6].
+- **Loss Functions**: The optimization involves minimizing uniqueness loss (to push triggered queries away from benign ones) and compactness loss (to improve similarity among triggered queries), while maintaining target generation and coherence constraints [7] [8].
+- **Optimization Algorithm**: A gradient-based beam search algorithm is used for iterative optimization, searching for replacement tokens that improve the objective while satisfying constraints [9].
+- **Poisoning Strategy**: The paper uses 'spurious correlation' for Agent-Driver and 'adversarial backdoor' for ReAct-StrategyQA and EHRAgent. Spurious correlation involves injecting optimized triggers into benign examples where the original output is the target action, making it more stealthy [10].
+
+### Limitations of the Approach
+- **White-box Access Requirement**: AGENTPOISON requires the attacker to have white-box access to the embedder for trigger optimization. However, the authors empirically show that the optimized trigger can transfer well among different embedders, even those with different training schemes [11].
+- **Poisoning Ratio**: While effective, it gets harder to distinguish the effectiveness of different methods as more instances are poisoned, suggesting a practical limit to the poisoning ratio [12].
+
+### Datasets and Evaluation Metrics
+- **LLM Agent Types**: The approach was evaluated on three types of real-world LLM agents [13]:
+    - **Agent-Driver**: For autonomous driving, using its corresponding dataset with 23k experiences in the memory unit [13].
+    - **ReAct (StrategyQA)**: For knowledge-intensive QA, using the StrategyQA dataset with a curated knowledge base of 10k passages [13].
+    - **EHRAgent**: For healthcare record management, using an augmented memory unit with 700 experiences [13].
+- **Baselines**: AGENTPOISON was compared against four baselines for trigger optimization [14]:
+    - Greedy Coordinate Gradient (GCG) [14]
+    - AutoDAN [14]
+    - Corpus Poisoning Attack (CPA) [14]
+    - BadChain [14]
+- **Evaluation Metrics**: The following metrics were used to assess performance [15]:
+    - **Attack Success Rate for Retrieval (ASR-r)**: Percentage of test instances where all retrieved demonstrations are poisoned [15].
+    - **Attack Success Rate for Target Action (ASR-a)**: Percentage of test instances where the agent generates the target adversarial action, conditioned on successful retrieval [15].
+    - **End-to-End Target Attack Success Rate (ASR-t)**: Overall success rate including both retrieval and adversarial action generation [15].
+    - **Benign Accuracy (ACC)**: Percentage of test instances with correct action output without the trigger, measuring model utility under attack [15].
+
+In summary, AGENTPOISON is a novel red-teaming method designed to expose vulnerabilities in RAG-based LLM agents by poisoning their memory or knowledge bases. It uses a constrained optimization approach to generate stealthy and effective backdoor triggers, demonstrating superior attack success rates with minimal impact on benign performance across various real-world LLM agent applications.

@@ -1,0 +1,28 @@
+trust model paper analaysis:
+
+## Analysis of Algorithmic Cognitive Decision Trust Modeling for Cyber Security
+
+### Problem Being Solved
+- The paper addresses the increasing threat of cybercrime to business processes, which erodes stakeholders' trust in Internet technologies [1]. It aims to understand how algorithmic trust positions influence cognitive processing to improve an organization's productivity and alignment with values for combating cybercrimes [1]. Specifically, it seeks to enhance understanding of the cognitive representation of decision-making processes in the context of trust and fraud [1] [2].
+
+### Methodology or Approach Used
+- **Throughput Model:** The core methodology is a cognitive decision-modeling approach called the throughput model, which represents risky decision-making as a sequence of perception (P), information (I), judgment (J), and decision choice (D) [3] [4]. This model assumes that information inputs are filtered through perception and judgment before decisions are made [4].
+- **Six Algorithmic Trust Pathways:** The model incorporates six dominant algorithmic trust positions, each tied to specific pathways within the throughput model, to provide solutions to problems [5] [6]. These pathways are:
+    - **Rational-based trust (P→D):** Focuses on individuals maximizing gains and minimizing losses, prevalent in low-risk/high-certainty situations [7].
+    - **Rule-based trust (P→J→D):** Emphasizes the use of rules, laws, and regulations to influence trust, involving both explicit and implicit contracts [8].
+    - **Category-based trust (I→J→D):** Relies on direct information impacting judgment, where individuals are subject to preformatted information regarding relationship types, often seen in social networks [9].
+    - **Third-party-based trust (I→P→D):** Relies on third parties as channels of trust, where decision-makers use people around them to define their trust pathways [10].
+    - **Role-based trust (P→I→J→D):** Trust is based on the role (profession, expertise, position, attribute) of the party to be trusted [11].
+    - **Knowledge-based trust (I→P→J→D):** Expands on rule-based trust by incorporating past and present information (knowledge) to influence perceptions, judgments, and decisions [12].
+- **Fraud Triangle:** The paper integrates the fraud triangle (perceived opportunity, perceived pressure/incentive, and rationalization justification of fraud) to diagnose high-risk fraud situations and understand how trust positions can reduce fraudulent behaviors [13].
+- **Process Errors:** The model embeds trust positions based on two types of process errors: Type 1 (false positive, rejecting individuals who should be admitted) and Type 2 (false negative, accepting individuals who should not be admitted) [14] [15].
+
+### Limitations of the Approach
+- **Conceptual Nature:** The paper is primarily conceptual, utilizing propositions to suggest links between concepts rather than presenting empirical findings [16]. It aims to spur further research and generate hypotheses that can be tested, rather than providing definitive solutions [16] [17].
+- **Generalizability Concerns:** Some studies have questioned the generalizability of the framing effect due to predictable eliminations and reversals, which could impact the broader applicability of the cognitive model [18].
+- **Complexity of AI Algorithms:** While the throughput model advances algorithmic pathways for AI, experimental testing of extremely complex AI algorithms, especially those dealing with the sociology and economics of AI impact on users, can be prohibitively expensive or difficult [19].
+
+### Datasets and Evaluation Metrics Used
+- The paper is a conceptual research article and does not describe the use of specific datasets or evaluation metrics. Its primary goal is to generate propositions and hypotheses for future testing rather than to present empirical results or evaluate a model against data [16] [17].
+
+In summary, this paper introduces a conceptual framework for understanding how algorithmic trust positions influence decision-making in cybersecurity contexts, leveraging a throughput model and the fraud triangle. While it provides a detailed theoretical foundation and proposes several algorithmic pathways for trust, it acknowledges its conceptual nature and the need for future empirical validation without presenting specific datasets or evaluation metrics.
